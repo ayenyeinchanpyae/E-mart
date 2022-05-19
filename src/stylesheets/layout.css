@@ -1,0 +1,33 @@
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 2;
+}
+.navbar {
+  background-color: rgb(92, 98, 150) !important;
+}
+.navbar-brand {
+  color: white !important;
+  font-weight: bold;
+}
+
+.nav-link {
+  color: white !important;
+}
+
+.content {
+  padding-top: 80px;
+}
+
+.footer {
+  text-align: center;
+  color: white;
+  padding: 10px;
+  background-color: rgb(92, 98, 150) !important;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
