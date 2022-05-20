@@ -4,13 +4,13 @@ import { FaBars } from "react-icons/fa";
 function Header() {
   return (
     <div className="header">
-      <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container-fluid">
-          <Link class="navbar-brand" to="/">
+      <nav className="navbar navbar-expand-lg navbar-light bg-light">
+        <div className="container-fluid">
+          <Link className="navbar-brand" to="/">
             Ecommerce
           </Link>
           <button
-            class="navbar-toggler"
+            className="navbar-toggler"
             type="button"
             data-bs-toggle="collapse"
             data-bs-target="#navbarNav"
@@ -22,25 +22,25 @@ function Header() {
               <FaBars size={25} color="white" />
             </span>
           </button>
-          <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto">
-              <li class="nav-item">
-                <Link class="nav-link active" aria-current="page" to="/">
+          <div className="collapse navbar-collapse" id="navbarNav">
+            <ul className="navbar-nav ms-auto">
+              <li className="nav-item">
+                <Link className="nav-link active" aria-current="page" to="/">
                   user
                 </Link>
               </li>
-              <li class="nav-item">
-                <Link class="nav-link" to="/">
+              <li className="nav-item">
+                <Link className="nav-link" to="/">
                   orders
                 </Link>
               </li>
-              <li class="nav-item">
-                <Link class="nav-link" to="/">
+              <li className="nav-item">
+                <Link className="nav-link" to="/">
                   Logout
                 </Link>
               </li>
-              <li class="nav-item">
-                <Link class="nav-link" to="/">
+              <li className="nav-item">
+                <Link className="nav-link" to="/">
                   cart
                 </Link>
               </li>
