@@ -31,3 +31,15 @@
   left: 0;
   right: 0;
 }
+
+button {
+  background-color: rgb(92, 98, 150);
+  box-sizing: none;
+  border: none;
+  padding: 5px;
+  color: white;
+}
+
+button:hover {
+  background-color: blue;
+}

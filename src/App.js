@@ -8,6 +8,7 @@ import CartPage from "./pages/CartPage";
 import ProductInfo from "./pages/ProductInfo";
 
 import "./stylesheets/layout.css";
+import "./stylesheets/products.css";
 
 function App() {
   return (
@@ -17,7 +18,7 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/login" exact element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
-          <Route path="/productinfo" element={<ProductInfo />} />
+          <Route path="/productinfo/:productid" element={<ProductInfo />} />
           <Route path="/cart" element={<CartPage />} />
         </Routes>
       </Router>
