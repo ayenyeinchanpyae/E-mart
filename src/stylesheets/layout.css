@@ -32,7 +32,19 @@
   right: 0;
 }
 
-button {
+.loader {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.spinner-border {
+  height: 100px;
+  width: 100px;
+}
+
+/* button {
   background-color: rgb(92, 98, 150);
   box-sizing: none;
   border: none;
@@ -42,4 +54,4 @@ button {
 
 button:hover {
   background-color: blue;
-}
+} */

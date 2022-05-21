@@ -1,18 +1,24 @@
 import { collection, addDoc, getDocs } from "firebase/firestore";
 import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import Layout from "../components/Layout";
 import fireDB from "../fireConfig";
 
 function HomePage() {
   const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const { cartItems } = useSelector((state) => state.cartReducer);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   useEffect(() => {
     getData();
   }, []);
 
   async function getData() {
     try {
+      setLoading(true);
       const users = await getDocs(collection(fireDB, "products"));
       const productsArray = [];
       users.forEach((doc) => {
@@ -21,15 +27,23 @@ function HomePage() {
           ...doc.data(),
         };
         productsArray.push(obj);
+        setLoading(false);
       });
       setProducts(productsArray);
     } catch (error) {
       console.log(error);
+      setLoading(false);
     }
   }
+  useEffect(() => {
+    localStorage.setItem("cartItems", JSON.stringify(cartItems));
+  }, [cartItems]);
 
+  const addToCart = (product) => {
+    dispatch({ type: "ADD_TO_CART", payload: product });
+  };
   return (
-    <Layout>
+    <Layout loading={loading}>
       <div className="container">
         <div className="row">
           {products.map((product) => {
@@ -49,7 +63,12 @@ function HomePage() {
                   <div className="product-actions">
                     <h3>$ - {product.price}</h3>
                     <div className="d-flex">
-                      <button className="mx-2">Add to Cart</button>
+                      <button
+                        className="mx-2"
+                        onClick={() => addToCart(product)}
+                      >
+                        Add to Cart
+                      </button>
                       <button
                         onClick={() => {
                           navigate(`/productinfo/${product.id}`);
