@@ -1,0 +1,17 @@
+.register-form {
+  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
+    rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: auto;
+}
+
+.form-control {
+  width: 20rem;
+}
+.auth-btns {
+  border: none;
+  width: 90%;
+  height: 3rem;
+}

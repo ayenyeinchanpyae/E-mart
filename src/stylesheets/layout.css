@@ -44,6 +44,10 @@
   width: 100px;
 }
 
+a {
+  text-decoration: none;
+}
+
 /* button {
   background-color: rgb(92, 98, 150);
   box-sizing: none;
