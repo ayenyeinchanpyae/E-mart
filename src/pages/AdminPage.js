@@ -17,9 +17,13 @@ import { async } from "@firebase/util";
 
 function AdminPage() {
   const [products, setProducts] = useState([]);
+  const [productname, setProductname] = useState("");
+  const [url, setUrl] = useState("");
+  const [price, setPrice] = useState("");
+  const [catg, setCatg] = useState("");
   const [product, setProduct] = useState({
     name: "",
-    categoryprice: 0,
+    price: 0,
     imageURL: "",
     category: "",
   });
@@ -55,6 +59,7 @@ function AdminPage() {
 
   const editHandler = (item) => {
     setProduct(item);
+    setAdd(false);
     setShow(true);
   };
 
@@ -122,7 +127,7 @@ function AdminPage() {
         <tbody>
           {products.map((item) => {
             return (
-              <tr>
+              <tr key={item}>
                 <td>
                   <img src={item.imageURL} alt="" height="80" width="80" />
                 </td>
@@ -147,8 +152,9 @@ function AdminPage() {
             type="text"
             className="form-control m-3"
             placeholder="name"
-            value={product.name}
+            value={add ? productname : product.name}
             onChange={(e) => {
+              setProductname(e.target.value);
               setProduct({ ...product, name: e.target.value });
             }}
           />
@@ -156,8 +162,9 @@ function AdminPage() {
             type="text"
             className="form-control m-3"
             placeholder="imageURL"
-            value={product.imageURL}
+            value={add ? url : product.imageURL}
             onChange={(e) => {
+              setUrl(e.target.value);
               setProduct({ ...product, imageURL: e.target.value });
             }}
           />
@@ -165,8 +172,9 @@ function AdminPage() {
             type="text"
             className="form-control m-3"
             placeholder="price"
-            value={product.price}
+            value={add ? price : product.price}
             onChange={(e) => {
+              setPrice(e.target.value);
               setProduct({ ...product, price: e.target.value });
             }}
           />
@@ -174,8 +182,9 @@ function AdminPage() {
             type="text"
             className="form-control m-3"
             placeholder="category"
-            value={product.category}
+            value={add ? catg : product.category}
             onChange={(e) => {
+              setCatg(e.target.value);
               setProduct({ ...product, category: e.target.value });
             }}
           />
@@ -190,7 +199,7 @@ function AdminPage() {
             </Button>
           ) : (
             <Button variant="primary" onClick={updateProduct}>
-              Save
+              Update
             </Button>
           )}
         </Modal.Footer>
