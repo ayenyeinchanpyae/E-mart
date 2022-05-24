@@ -18,6 +18,7 @@ import "./stylesheets/products.css";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AdminPage from "./pages/AdminPage";
+import OrdersPage from "./pages/OrdersPage";
 function App() {
   return (
     <>
@@ -46,6 +47,14 @@ function App() {
             element={
               <ProtectedRoutes>
                 <CartPage />
+              </ProtectedRoutes>
+            }
+          />
+          <Route
+            path="/orders"
+            element={
+              <ProtectedRoutes>
+                <OrdersPage />
               </ProtectedRoutes>
             }
           />
