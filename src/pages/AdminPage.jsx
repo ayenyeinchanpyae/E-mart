@@ -12,14 +12,19 @@ import {
 import fireDB from "../fireConfig";
 import Layout from "../components/Layout";
 import { FaEdit, FaTrash } from "react-icons/fa";
+import "../stylesheets/admin.css";
 import { toast } from "react-toastify";
-import { async } from "@firebase/util";
 
 function AdminPage() {
   const [products, setProducts] = useState([]);
+  const [productname, setProductname] = useState("");
+  const [url, setUrl] = useState("");
+  const [price, setPrice] = useState("");
+  const [catg, setCatg] = useState("");
+  const [desc, setDesc] = useState("");
   const [product, setProduct] = useState({
     name: "",
-    categoryprice: 0,
+    price: 0,
     imageURL: "",
     category: "",
   });
@@ -55,6 +60,7 @@ function AdminPage() {
 
   const editHandler = (item) => {
     setProduct(item);
+    setAdd(false);
     setShow(true);
   };
 
@@ -105,39 +111,45 @@ function AdminPage() {
   };
   return (
     <Layout loading={loading}>
-      <div className="d-flex justify-content-between">
-        <h3>Products List</h3>
-        <button onClick={addHandler}>ADD PRODUCT</button>
+      <div className="wrapper">
+        <div className="d-flex justify-content-between">
+          <h3>Products List</h3>
+          <button onClick={addHandler} className="add-product-btn">
+            ADD PRODUCT
+          </button>
+        </div>
+        <table className="table mt-3">
+          <thead>
+            <tr>
+              <th>Image</th>
+              <th>Name</th>
+              <th>Category</th>
+              <th>Price</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {products.map((item) => {
+              return (
+                <tr key={item}>
+                  <td>
+                    <img src={item.imageURL} alt="" height="80" width="80" />
+                  </td>
+                  <td>{item.name}</td>
+                  <td>{item.category}</td>
+                  <td>${item.price}</td>
+                  <td>
+                    <div className="action-btns">
+                      <FaTrash onClick={() => deleteProduct(item)} />
+                      <FaEdit onClick={() => editHandler(item)} size={20} />
+                    </div>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
       </div>
-      <table className="table mt-2">
-        <thead>
-          <tr>
-            <th>Image</th>
-            <th>Name</th>
-            <th>Category</th>
-            <th>Price</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {products.map((item) => {
-            return (
-              <tr>
-                <td>
-                  <img src={item.imageURL} alt="" height="80" width="80" />
-                </td>
-                <td>{item.name}</td>
-                <td>{item.category}</td>
-                <td>${item.price}</td>
-                <td>
-                  <FaTrash onClick={() => deleteProduct(item)} />
-                  <FaEdit onClick={() => editHandler(item)} size={20} />
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>{add ? "Add a product" : "Edit Product"}</Modal.Title>
@@ -147,8 +159,9 @@ function AdminPage() {
             type="text"
             className="form-control m-3"
             placeholder="name"
-            value={product.name}
+            value={add ? productname : product.name}
             onChange={(e) => {
+              setProductname(e.target.value);
               setProduct({ ...product, name: e.target.value });
             }}
           />
@@ -156,8 +169,9 @@ function AdminPage() {
             type="text"
             className="form-control m-3"
             placeholder="imageURL"
-            value={product.imageURL}
+            value={add ? url : product.imageURL}
             onChange={(e) => {
+              setUrl(e.target.value);
               setProduct({ ...product, imageURL: e.target.value });
             }}
           />
@@ -165,8 +179,9 @@ function AdminPage() {
             type="text"
             className="form-control m-3"
             placeholder="price"
-            value={product.price}
+            value={add ? price : product.price}
             onChange={(e) => {
+              setPrice(e.target.value);
               setProduct({ ...product, price: e.target.value });
             }}
           />
@@ -174,23 +189,34 @@ function AdminPage() {
             type="text"
             className="form-control m-3"
             placeholder="category"
-            value={product.category}
+            value={add ? catg : product.category}
             onChange={(e) => {
+              setCatg(e.target.value);
+              setProduct({ ...product, category: e.target.value });
+            }}
+          />
+          <textarea
+            type="text"
+            className="form-control m-3"
+            placeholder="description"
+            value={add ? desc : product.description}
+            onChange={(e) => {
+              setDesc(e.target.value);
               setProduct({ ...product, category: e.target.value });
             }}
           />
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
+          <Button className="cancel-btn" onClick={handleClose}>
             Cancel
           </Button>
           {add ? (
-            <Button variant="primary" onClick={addProduct}>
+            <Button className="modal-btn" onClick={addProduct}>
               Save
             </Button>
           ) : (
-            <Button variant="primary" onClick={updateProduct}>
-              Save
+            <Button className="modal-btn" onClick={updateProduct}>
+              Update
             </Button>
           )}
         </Modal.Footer>

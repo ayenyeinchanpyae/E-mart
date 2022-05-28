@@ -1,0 +1,46 @@
+.wrapper {
+  margin: 1rem 2rem 1rem 2rem;
+}
+.add-product-btn {
+  background-color: var(--button-primary-color);
+  border: none;
+  border-radius: 5px;
+  color: white;
+}
+
+.modal-btn {
+  background-color: var(--button-primary-color);
+  border: none;
+}
+
+.modal-btn:hover {
+  background-color: var(--primary-color);
+}
+
+.cancel-btn {
+  background-color: rgb(173, 174, 176);
+  border: none;
+}
+
+.cancel-btn:hover {
+  background-color: rgb(96, 97, 99);
+}
+
+.table {
+  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
+    rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+}
+
+.action-btns {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+@media screen and (max-width: 390px) {
+  .wrapper {
+    margin: 0;
+  }
+}

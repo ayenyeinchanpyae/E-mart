@@ -12,6 +12,7 @@ import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import CartPage from "./pages/CartPage";
 import ProductInfo from "./pages/ProductInfo";
+import Product from "./pages/Product";
 
 import "./stylesheets/layout.css";
 import "./stylesheets/products.css";
@@ -25,15 +26,6 @@ function App() {
       <ToastContainer />
       <Router>
         <Routes>
-          <Route
-            path="/"
-            element={
-              <ProtectedRoutes>
-                <HomePage />
-              </ProtectedRoutes>
-            }
-          />
-
           <Route
             path="/productinfo/:productid"
             element={
@@ -66,8 +58,17 @@ function App() {
               </ProtectedRoutes>
             }
           />
+          <Route
+            path="/products"
+            element={
+              <ProtectedRoutes>
+                <Product />
+              </ProtectedRoutes>
+            }
+          />
           <Route path="/login" exact element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
+          <Route path="/" element={<HomePage />} />
         </Routes>
       </Router>
     </>

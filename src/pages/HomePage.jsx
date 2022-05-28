@@ -4,10 +4,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import Layout from "../components/Layout";
 import fireDB from "../fireConfig";
-
-function ProductCard({ id, imageURL, name, price }) {
+import Product from "./Product";
+function HomePage() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [searchKey, setSearchKey] = useState("");
+  const [filter, setFiler] = useState("");
   const { cartItems } = useSelector((state) => state.cartReducer);
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -39,37 +41,14 @@ function ProductCard({ id, imageURL, name, price }) {
     localStorage.setItem("cartItems", JSON.stringify(cartItems));
   }, [cartItems]);
 
-  //   const addToCart = (product) => {
-  //     dispatch({ type: "ADD_TO_CART", payload: product });
-  //   };
+  const addToCart = (product) => {
+    dispatch({ type: "ADD_TO_CART", payload: product });
+  };
   return (
-    <div className="col-md-4">
-      <div className="m-2 p-1 product position-relative">
-        <div className="product-content">
-          <div className="text-center">
-            <img src={imageURL} alt="" className="product-img" />
-          </div>
-          <p>{name}</p>
-        </div>
-        <div className="product-actions">
-          <h3>$ - {price}</h3>
-          <div className="d-flex">
-            <button className="mx-2">
-              {/* onClick={() => addToCart(product)} */}
-              Add to Cart
-            </button>
-            <button
-              onClick={() => {
-                navigate(`/productinfo/${id}`);
-              }}
-            >
-              View
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
+    <Layout loading={loading}>
+      <div className="hero-section">info blah blah</div>
+    </Layout>
   );
 }
 
-export default ProductCard;
+export default HomePage;

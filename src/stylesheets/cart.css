@@ -1,17 +1,13 @@
-.cart-wrapper {
-  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
-    rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
-  margin: 10px;
-}
-
-.total-amount {
-  background-color: rgb(81, 100, 118);
-  color: white;
-  padding: 10px;
-}
-
 .qty-btn {
   border-radius: 5%;
   background-color: wheat;
   border: none;
+}
+
+.place-order-btn {
+  background-color: var(--button-primary-color);
+  border: none;
+  border-radius: 5px;
+  color: white;
+  height: 2.5rem;
 }

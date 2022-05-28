@@ -21,6 +21,7 @@ function RegisterPage() {
       console.log(result);
       setLoading(false);
       toast.success("Registration successful");
+      //redirect to home page
     } catch (error) {
       setLoading(false);
       console.log(error);
