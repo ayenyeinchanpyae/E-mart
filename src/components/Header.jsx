@@ -1,13 +1,13 @@
 import { Link } from "react-router-dom";
 import { FaBars, FaCartPlus } from "react-icons/fa";
 import { useSelector } from "react-redux";
-
+import Cookies from "js-cookie";
 function Header() {
   const { cartItems } = useSelector((state) => state.cartReducer);
-  const { user } = JSON.parse(localStorage.getItem("currentUser"));
+  const token = Cookies.get("Token");
 
   const logout = () => {
-    localStorage.removeItem("currentUser");
+    Cookies.remove("Token");
     window.location.reload();
   };
   return (
@@ -42,9 +42,16 @@ function Header() {
                 </Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link active" aria-current="page" to="/">
-                  {user.email.substring(0, user.email.length - 10)}
-                </Link>
+                <p className="nav-link active" aria-current="page" to="/">
+                  {token ? (
+                    "user name"
+                  ) : (
+                    <Link className="nav-link" to="/">
+                      Login
+                    </Link>
+                  )}
+                  {/* {user.email.substring(0, user.email.length - 10)} */}
+                </p>
               </li>
               <li className="nav-item">
                 <Link className="nav-link" to="/">

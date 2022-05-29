@@ -7,6 +7,7 @@ import {
   Link,
   Navigate,
 } from "react-router-dom";
+import Cookies from "js-cookie";
 import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
@@ -58,14 +59,7 @@ function App() {
               </ProtectedRoutes>
             }
           />
-          <Route
-            path="/products"
-            element={
-              <ProtectedRoutes>
-                <Product />
-              </ProtectedRoutes>
-            }
-          />
+          <Route path="/products" element={<Product />} />
           <Route path="/login" exact element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/" element={<HomePage />} />
@@ -78,7 +72,7 @@ function App() {
 export default App;
 
 export const ProtectedRoutes = ({ children }) => {
-  if (localStorage.getItem("currentUser")) {
+  if (Cookies.get("Token")) {
     return children;
   } else {
     return <Navigate to="/login" />;

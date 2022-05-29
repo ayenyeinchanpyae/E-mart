@@ -7,10 +7,12 @@ import fireDB from "../fireConfig";
 
 function HomePage() {
   const [products, setProducts] = useState([]);
+  const [temp, setTemp] = useState([]);
   const [loading, setLoading] = useState(false);
   const [searchKey, setSearchKey] = useState("");
   const [filter, setFiler] = useState("");
   const { cartItems } = useSelector((state) => state.cartReducer);
+  console.log("cart item", cartItems);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -37,13 +39,37 @@ function HomePage() {
       setLoading(false);
     }
   }
-  useEffect(() => {
-    localStorage.setItem("cartItems", JSON.stringify(cartItems));
-  }, [cartItems]);
+  // useEffect(() => {
+  //   localStorage.setItem("cartItems", JSON.stringify(cartItems));
+  // }, [cartItems]);
 
   const addToCart = (product) => {
-    dispatch({ type: "ADD_TO_CART", payload: product });
+    console.log("product cart item", cartItems);
+    const productExist = cartItems.find((item) => item.id === product.id);
+    if (productExist) {
+      console.log("product exist");
+
+      setTemp(
+        cartItems.map((item) =>
+          item.id === product.id
+            ? {
+                ...productExist,
+                quantity: productExist.quantity + 1,
+              }
+            : item
+        )
+      );
+      console.log("temp", temp);
+      // dispatch({
+      //   type: "ADD_TO_CART",
+      //   payload: temp,
+      // });
+    } else {
+      console.log("new");
+      dispatch({ type: "ADD_TO_CART", payload: product });
+    }
   };
+  console.log("temp", temp);
   return (
     <Layout loading={loading}>
       <div className="container">

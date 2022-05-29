@@ -72,7 +72,7 @@ function CartPage() {
     <Layout loading={loading}>
       <div className="row m-3">
         <div className="col-sm-6 col-xs-6 col-md-6 col-md-6">
-          <table class="table">
+          <table className="table-responsive">
             <thead>
               <tr>
                 <th scope="col">Image</th>
@@ -92,7 +92,7 @@ function CartPage() {
                     </td>
                     <td>{item.name}</td>
                     <td>{item.category}</td>
-                    <td>1</td>
+                    <td>{item.quantity}</td>
                     <td>${item.price}</td>
                     <td>
                       <div className="action-btn">

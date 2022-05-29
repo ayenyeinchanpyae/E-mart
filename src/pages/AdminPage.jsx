@@ -118,7 +118,7 @@ function AdminPage() {
             ADD PRODUCT
           </button>
         </div>
-        <table className="table mt-3">
+        <table className="table-responsive mt-3">
           <thead>
             <tr>
               <th>Image</th>

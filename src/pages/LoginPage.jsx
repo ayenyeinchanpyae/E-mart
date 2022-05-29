@@ -1,10 +1,9 @@
 import React, { useState } from "react";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import "../stylesheets/authentication.css";
 import Loader from "../components/Loader";
-
+import Cookies from "js-cookie";
 function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -15,7 +14,8 @@ function LoginPage() {
     try {
       setLoading(true);
       const result = await signInWithEmailAndPassword(auth, email, password);
-      localStorage.setItem("currentUser", JSON.stringify(result));
+      console.log("result", result);
+      Cookies.set("Token", result.user.accessToken);
       window.location.href = "/";
       setLoading(false);
       toast.success("Login successful");
