@@ -1,20 +1,42 @@
 import { Link } from "react-router-dom";
 import { FaBars, FaCartPlus } from "react-icons/fa";
-import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
+import { collection, getDocs } from "firebase/firestore";
+import fireDB from "../fireConfig";
 function Header() {
-  const { cartItems } = useSelector((state) => state.cartReducer);
   const token = Cookies.get("Token");
+  const uid = Cookies.get("id");
+  const [cartItems, setCartItems] = useState([]);
+  useEffect(() => {
+    getCartItems();
+  });
 
   const logout = () => {
     Cookies.remove("Token");
+    Cookies.remove("id");
     window.location.reload();
   };
+
+  const getCartItems = async () => {
+    try {
+      const itemArray = [];
+      const querySnapshot = await getDocs(
+        collection(fireDB, "cart", uid, "items")
+      );
+      querySnapshot.forEach((doc) => {
+        itemArray.push(doc.data());
+      });
+      setCartItems(itemArray);
+    } catch (error) {}
+    //setCartItems[itemArray.length];
+  };
+
   return (
     <div className="header">
       <nav className="navbar navbar-expand-lg navbar-light bg-light">
         <div className="container-fluid">
-          <Link className="navbar-brand" to="/">
+          <Link className="navbar-brand ms-5" to="/">
             Ecommerce
           </Link>
           <button
@@ -42,26 +64,34 @@ function Header() {
                 </Link>
               </li>
               <li className="nav-item">
-                <p className="nav-link active" aria-current="page" to="/">
-                  {token ? (
-                    "user name"
-                  ) : (
-                    <Link className="nav-link" to="/">
-                      Login
-                    </Link>
-                  )}
-                  {/* {user.email.substring(0, user.email.length - 10)} */}
-                </p>
+                {token ? (
+                  <Link className="nav-link active" aria-current="page" to="">
+                    User Name
+                  </Link>
+                ) : (
+                  <Link
+                    className="nav-link active"
+                    aria-current="page"
+                    to="/login"
+                  >
+                    Login
+                  </Link>
+                )}
+                {/* {user.email.substring(0, user.email.length - 10)} */}
               </li>
-              <li className="nav-item">
+              {/* <li className="nav-item">
                 <Link className="nav-link" to="/">
-                  orders
+                  Orders
                 </Link>
-              </li>
+              </li> */}
               <li className="nav-item">
-                <Link className="nav-link" to="/" onClick={logout}>
-                  Logout
-                </Link>
+                {token ? (
+                  <Link className="nav-link" to="/" onClick={logout}>
+                    Logout
+                  </Link>
+                ) : (
+                  ""
+                )}
               </li>
               <li className="nav-item">
                 <Link className="nav-link" to="/cart">

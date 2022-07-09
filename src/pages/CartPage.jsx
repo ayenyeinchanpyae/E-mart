@@ -1,15 +1,15 @@
 import { FaTrash } from "react-icons/fa";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { collection, addDoc } from "firebase/firestore";
+import { collection, addDoc, getDocs } from "firebase/firestore";
 import fireDB from "../fireConfig";
 import Layout from "../components/Layout";
 import "../stylesheets/cart.css";
 import { Modal, Button } from "react-bootstrap";
 import { toast } from "react-toastify";
-
+import Cookies from "js-cookie";
 function CartPage() {
-  const { cartItems } = useSelector((state) => state.cartReducer);
+  const [cartItems, setCartItems] = useState([]);
   const [totalAmount, setTotalAmount] = useState(0);
   const [loading, setLoading] = useState(false);
   const [name, setName] = useState("");
@@ -21,25 +21,41 @@ function CartPage() {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-
+  const uid = Cookies.get("id");
   const discount = 0;
   const tax = 15;
   const deliveryFee = 20;
-  useEffect(() => {
-    let total = 0;
-    cartItems.forEach((cartItem) => {
-      total = total + cartItem.price;
-    });
-    console.log(total);
-    setTotalAmount(total);
-  }, [cartItems]);
 
   useEffect(() => {
-    localStorage.setItem("cartItems", JSON.stringify(cartItems));
-  }, [cartItems]);
-
+    getCartItems();
+  }, []);
+  useEffect(() => {
+    totalPrice();
+  }, []);
   const deleteFromCart = (product) => {
     dispatch({ type: "DELETE_FROM_CART", payload: product });
+  };
+  const totalPrice = () => {
+    let total = 0;
+    cartItems.forEach((item) => {
+      total = total + item.price;
+    });
+    setTotalAmount(total);
+  };
+  const getCartItems = async () => {
+    try {
+      const itemArray = [];
+      const querySnapshot = await getDocs(
+        collection(fireDB, "cart", uid, "items")
+      );
+      querySnapshot.forEach((doc) => {
+        itemArray.push(doc.data());
+      });
+      setCartItems(itemArray);
+    } catch (error) {
+      console.log(error);
+    }
+    //setCartItems[itemArray.length];
   };
 
   const placeOrder = async () => {
@@ -70,75 +86,110 @@ function CartPage() {
   };
   return (
     <Layout loading={loading}>
-      <div className="row m-3">
-        <div className="col-sm-6 col-xs-6 col-md-6 col-md-6">
-          <table className="table-responsive">
-            <thead>
-              <tr>
-                <th scope="col">Image</th>
-                <th scope="col">Name</th>
-                <th scope="col">Category</th>
-                <th scope="col">Quantity</th>
-                <th scope="col">Price</th>
-                <th scope="col">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {cartItems.map((item) => {
-                return (
-                  <tr key={item}>
-                    <td>
-                      <img src={item.imageURL} alt="" height="80" width="80" />
-                    </td>
-                    <td>{item.name}</td>
-                    <td>{item.category}</td>
-                    <td>{item.quantity}</td>
-                    <td>${item.price}</td>
-                    <td>
-                      <div className="action-btn">
-                        <FaTrash onClick={() => deleteFromCart(item)} />
-                      </div>
-                    </td>
+      <div className="container">
+        <div className="row">
+          <div className="col-lg-6">
+            {/* {cartItems.map((item) => {
+              return (
+                <div className="d-flex mb-3">
+                  <div>
+                    <img
+                      src={item.imageURL}
+                      className="me-2"
+                      alt=""
+                      height="80"
+                      width="80"
+                    />
+                  </div>
+                  <div className="me-2">
+                    <p>{item.name}</p>
+                  </div>
+                  <div className="me-2">
+                    <p>{item.category}</p>
+                  </div>
+                  <div className="me-2">
+                    <p>{item.quantity}</p>
+                  </div>
+                  <div className="me-2">
+                    <p>${item.price}</p>
+                  </div>
+                  <div>
+                    <div className="action-btn">
+                      <FaTrash onClick={() => deleteFromCart(item)} />
+                    </div>
+                  </div>
+                </div>
+              );
+            })} */}
+            <div className="table-responsive">
+              <table className="table">
+                <thead>
+                  <tr>
+                    <th scope="col">Image</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Category</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Action</th>
                   </tr>
-                );
-              })}
-            </tbody>
-          </table>
-          {/* <>
-            <div className="d-flex justify-content-end">
-              <p className="total-amount">Total = $ {totalAmount}</p>
+                </thead>
+                <tbody>
+                  {cartItems.map((item) => {
+                    return (
+                      <tr>
+                        <td>
+                          <img
+                            src={item.imageURL}
+                            alt=""
+                            height="80"
+                            width="80"
+                          />
+                        </td>
+                        <td>{item.name}</td>
+                        <td>{item.category}</td>
+                        <td>{item.quantity}</td>
+                        <td>${item.price * item.quantity}</td>
+                        <td>
+                          <div className="action-btn">
+                            <FaTrash onClick={() => deleteFromCart(item)} />
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
             </div>
-            
-          </> */}
-        </div>
-        <div className="d-flex  align-items-center justify-content-center col-sm-12 col-xs-12 col-md-6 col-md-6 ">
-          <div className="d-flex flex-column w-50">
-            <h4 className="text-center">Order Summary</h4>
-            <div className="d-flex justify-content-between mb-2">
-              <span>Items Price</span>
-              <span>{totalAmount}</span>
-            </div>
-            <div className="d-flex justify-content-between mb-2">
-              <span>Discount</span>
-              <span>{discount}</span>
-            </div>
-            <div className="d-flex justify-content-between mb-2">
-              <span>Tax</span>
-              <span>{tax}</span>
-            </div>
-            <div className="d-flex justify-content-between mb-2">
-              <span>Delivery Fee</span>
-              <span>{deliveryFee}</span>
-            </div>
-            <hr />
-            <div className="d-flex justify-content-between">
-              <span>Total</span>
-              <span>$ - {discount + totalAmount + tax + deliveryFee}</span>
-            </div>
-            <div className="d-flex justify-content-end mt-3">
-              <button className="place-order-btn w-100" onClick={handleShow}>
-                Place Order
-              </button>
+          </div>
+          <div className="d-flex  align-items-center justify-content-center col-sm-12 col-xs-12 col-md-12 col-lg-6 ">
+            <div className="d-flex flex-column w-50">
+              <h4 className="text-center">Order Summary</h4>
+              <div className="d-flex justify-content-between mb-2">
+                <span>Items Price</span>
+                <span>{totalAmount}</span>
+              </div>
+              <div className="d-flex justify-content-between mb-2">
+                <span>Discount</span>
+                <span>{discount}</span>
+              </div>
+              <div className="d-flex justify-content-between mb-2">
+                <span>Tax</span>
+                <span>{tax}</span>
+              </div>
+              <div className="d-flex justify-content-between mb-2">
+                <span>Delivery Fee</span>
+                <span>{deliveryFee}</span>
+              </div>
+              <hr />
+              <div className="d-flex justify-content-between">
+                <span>Total</span>
+                <span>$ - {discount + totalAmount + tax + deliveryFee}</span>
+              </div>
+              <div className="d-flex justify-content-end mt-3">
+                <button className="place-order-btn w-100" onClick={handleShow}>
+                  CheckOut
+                </button>
+              </div>
             </div>
           </div>
         </div>

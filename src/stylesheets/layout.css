@@ -47,6 +47,15 @@
 a {
   text-decoration: none;
 }
+
+.shop-now-btn {
+  border: none;
+  height: 2.5rem;
+  background-color: var(--primary-color);
+  color: white;
+  border-radius: 5%;
+  width: 7rem;
+}
 /* button {
   background-color: rgb(92, 98, 150);
   box-sizing: none;

@@ -1,20 +1,31 @@
-import { collection, addDoc, getDocs } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  updateDoc,
+  setDoc,
+  addDoc,
+  getDocs,
+  getDoc,
+  onSnapshot,
+  query,
+} from "firebase/firestore";
+import { v4 as uuidv4 } from "uuid";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import Layout from "../components/Layout";
 import fireDB from "../fireConfig";
+import Cookies from "js-cookie";
+import { FaCaretSquareDown, FaCartPlus, FaEye } from "react-icons/fa";
 
-function HomePage() {
+function Product() {
   const [products, setProducts] = useState([]);
-  const [temp, setTemp] = useState([]);
   const [loading, setLoading] = useState(false);
   const [searchKey, setSearchKey] = useState("");
   const [filter, setFiler] = useState("");
-  const { cartItems } = useSelector((state) => state.cartReducer);
-  console.log("cart item", cartItems);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const uid = Cookies.get("id");
 
   useEffect(() => {
     getData();
@@ -39,41 +50,47 @@ function HomePage() {
       setLoading(false);
     }
   }
-  // useEffect(() => {
-  //   localStorage.setItem("cartItems", JSON.stringify(cartItems));
-  // }, [cartItems]);
 
-  const addToCart = (product) => {
-    console.log("product cart item", cartItems);
-    const productExist = cartItems.find((item) => item.id === product.id);
-    if (productExist) {
-      console.log("product exist");
-
-      setTemp(
-        cartItems.map((item) =>
-          item.id === product.id
-            ? {
-                ...productExist,
-                quantity: productExist.quantity + 1,
-              }
-            : item
-        )
+  const addToCart = async (product) => {
+    if (uid) {
+      const itemArray = [];
+      const querySnapshot = await getDocs(
+        collection(fireDB, "cart", uid, "items")
       );
-      console.log("temp", temp);
-      // dispatch({
-      //   type: "ADD_TO_CART",
-      //   payload: temp,
-      // });
+      querySnapshot.forEach((doc) => {
+        itemArray.push(doc.data());
+      });
+
+      const productExist = itemArray.find((item) => item.id === product.id);
+
+      if (productExist) {
+        const itemRef = doc(fireDB, "cart", uid, "items", product.id);
+
+        await updateDoc(itemRef, {
+          quantity: productExist.quantity + 1,
+          price: productExist.price,
+        });
+      } else {
+        const messageRef = doc(fireDB, "cart", uid, "items", product.id);
+        await setDoc(messageRef, {
+          id: product.id,
+          name: product.name,
+          price: product.price,
+          imageURL: product.imageURL,
+          description: product.description,
+          category: product.category,
+          quantity: product.quantity,
+        });
+      }
     } else {
-      console.log("new");
-      dispatch({ type: "ADD_TO_CART", payload: product });
+      navigate("/login");
     }
   };
-  console.log("temp", temp);
+
   return (
     <Layout loading={loading}>
       <div className="container">
-        <div className="d-flex w-50">
+        {/* <div className="d-flex w-50">
           <input
             value={searchKey}
             onChange={(e) => {
@@ -95,14 +112,14 @@ function HomePage() {
             <option value="women's clothing">Women's Clothing</option>
             <option value="beauty">Beauty</option>
           </select>
-        </div>
+        </div> */}
         <div className="row">
           {products
             .filter((obj) => obj.name.toLowerCase().includes(searchKey))
             .filter((obj) => obj.category.toLowerCase().includes(filter))
             .map((product) => {
               return (
-                <div className="col-md-4">
+                <div className="col-md-6 col-lg-3">
                   <div className="m-2 p-1 product position-relative">
                     <div className="product-content">
                       <div className="text-center">
@@ -115,21 +132,23 @@ function HomePage() {
                       <p className="m-2">{product.name}</p>
                     </div>
                     <div className="product-actions">
-                      <h3>$ - {product.price}</h3>
-                      <div className="d-flex">
-                        <button
-                          className="mx-2"
-                          onClick={() => addToCart(product)}
-                        >
-                          Add to Cart
-                        </button>
-                        <button
-                          onClick={() => {
-                            navigate(`/productinfo/${product.id}`);
-                          }}
-                        >
-                          View
-                        </button>
+                      <div className="d-flex flex-column">
+                        <h3>$ - {product.price}</h3>
+                        <div className="d-flex justify-content-between mt-3">
+                          <div>
+                            <FaCartPlus
+                              className="cart-btn fs-5"
+                              onClick={() => addToCart(product)}
+                            />
+                          </div>
+                          <div>
+                            <FaEye
+                              onClick={() => {
+                                navigate(`/productinfo/${product.id}`);
+                              }}
+                            />
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -142,4 +161,4 @@ function HomePage() {
   );
 }
 
-export default HomePage;
+export default Product;

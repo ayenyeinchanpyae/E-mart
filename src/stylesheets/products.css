@@ -35,3 +35,9 @@
 .product-info-img {
   height: 400px;
 }
+
+.cart-btn {
+  border: none;
+  color: white;
+  cursor: pointer;
+}
