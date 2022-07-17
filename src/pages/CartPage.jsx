@@ -1,13 +1,20 @@
 import { FaTrash } from "react-icons/fa";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { collection, addDoc, getDocs } from "firebase/firestore";
+import {
+  collection,
+  addDoc,
+  getDocs,
+  doc,
+  deleteDoc,
+} from "firebase/firestore";
 import fireDB from "../fireConfig";
 import Layout from "../components/Layout";
 import "../stylesheets/cart.css";
 import { Modal, Button } from "react-bootstrap";
 import { toast } from "react-toastify";
 import Cookies from "js-cookie";
+
 function CartPage() {
   const [cartItems, setCartItems] = useState([]);
   const [totalAmount, setTotalAmount] = useState(0);
@@ -32,13 +39,29 @@ function CartPage() {
   useEffect(() => {
     totalPrice();
   }, []);
+
   const deleteFromCart = (product) => {
-    dispatch({ type: "DELETE_FROM_CART", payload: product });
+    const docRef = doc(fireDB, "cart", uid, "items", product.id);
+
+    try {
+      setLoading(true);
+      deleteDoc(docRef)
+        .then(() => {
+          console.log("Entire Document has been deleted successfully.");
+          setLoading(false);
+          getCartItems();
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    } catch (error) {}
   };
+
   const totalPrice = () => {
     let total = 0;
     cartItems.forEach((item) => {
       total = total + item.price;
+      console.log(total);
     });
     setTotalAmount(total);
   };
@@ -59,6 +82,8 @@ function CartPage() {
   };
 
   const placeOrder = async () => {
+    clearCart();
+    getCartItems();
     const info = {
       name,
       address,
@@ -68,59 +93,56 @@ function CartPage() {
     const orderInfo = {
       cartItems,
       info,
-      email: JSON.parse(localStorage.getItem("currentUser")).user.email,
-      userid: JSON.parse(localStorage.getItem("currentUser")).user.uid,
+      userid: uid,
     };
 
     try {
       setLoading(true);
       const result = await addDoc(collection(fireDB, "orders"), orderInfo);
+      clearCart();
       setLoading(false);
       toast.success("Order Placed successfully");
-      localStorage.removeItem("cartItems");
+
       handleClose();
     } catch (error) {
       setLoading(false);
       toast.error("Order fail");
     }
   };
+
+  const clearCart = () => {
+    for (var i = 0; i < cartItems.length; i++) {
+      const docRef = doc(fireDB, "cart", uid, "items", cartItems[i].id);
+      try {
+        setLoading(true);
+        deleteDoc(docRef)
+          .then(() => {
+            setLoading(false);
+            getCartItems();
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      } catch (error) {}
+    }
+
+    // try {
+    //   setLoading(true);
+    //   deleteDoc(docRef)
+    //     .then(() => {
+    //       console.log("Entire Document has been deleted successfully.");
+    //       setLoading(false);
+    //     })
+    //     .catch((error) => {
+    //       console.log(error);
+    //     });
+    // } catch (error) {}
+  };
   return (
     <Layout loading={loading}>
       <div className="container">
         <div className="row">
           <div className="col-lg-6">
-            {/* {cartItems.map((item) => {
-              return (
-                <div className="d-flex mb-3">
-                  <div>
-                    <img
-                      src={item.imageURL}
-                      className="me-2"
-                      alt=""
-                      height="80"
-                      width="80"
-                    />
-                  </div>
-                  <div className="me-2">
-                    <p>{item.name}</p>
-                  </div>
-                  <div className="me-2">
-                    <p>{item.category}</p>
-                  </div>
-                  <div className="me-2">
-                    <p>{item.quantity}</p>
-                  </div>
-                  <div className="me-2">
-                    <p>${item.price}</p>
-                  </div>
-                  <div>
-                    <div className="action-btn">
-                      <FaTrash onClick={() => deleteFromCart(item)} />
-                    </div>
-                  </div>
-                </div>
-              );
-            })} */}
             <div className="table-responsive">
               <table className="table">
                 <thead>
@@ -197,55 +219,57 @@ function CartPage() {
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Modal heading</Modal.Title>
+          <Modal.Title>Place Your Order</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <input
-            type="text"
-            className="form-control m-3"
-            placeholder="name"
-            value={name}
-            onChange={(e) => {
-              setName(e.target.value);
-            }}
-          />
-          <input
-            type="text"
-            className="form-control m-3"
-            placeholder="phone number"
-            value={phoneNumber}
-            onChange={(e) => {
-              setPhoneNumber(e.target.value);
-            }}
-          />
+          <div className="d-flex align-items-center flex-column">
+            <input
+              type="text"
+              className="form-control m-3 w-75"
+              placeholder="name"
+              value={name}
+              onChange={(e) => {
+                setName(e.target.value);
+              }}
+            />
+            <input
+              type="text"
+              className="form-control m-3 w-75"
+              placeholder="phone number"
+              value={phoneNumber}
+              onChange={(e) => {
+                setPhoneNumber(e.target.value);
+              }}
+            />
 
-          <textarea
-            type="text"
-            className="form-control m-3"
-            placeholder="address"
-            value={address}
-            onChange={(e) => {
-              setAddress(e.target.value);
-            }}
-          />
-          <input
-            type="number"
-            className="form-control m-3"
-            placeholder="pin code"
-            value={pinCode}
-            onChange={(e) => {
-              setPinCode(e.target.value);
-            }}
-          />
+            <textarea
+              type="text"
+              className="form-control m-3 w-75"
+              placeholder="address"
+              value={address}
+              onChange={(e) => {
+                setAddress(e.target.value);
+              }}
+            />
+            <input
+              type="number"
+              className="form-control m-3 w-75"
+              placeholder="pin code"
+              value={pinCode}
+              onChange={(e) => {
+                setPinCode(e.target.value);
+              }}
+            />
+          </div>
+          <div className="d-flex gap-5 justify-content-end w-100 m-3">
+            <Button variant="secondary" onClick={handleClose}>
+              Close
+            </Button>
+            <button className="place-order-btn w-25 me-5" onClick={placeOrder}>
+              ORDER
+            </button>
+          </div>
         </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Close
-          </Button>
-          <Button variant="primary" onClick={placeOrder}>
-            ORDER
-          </Button>
-        </Modal.Footer>
       </Modal>
     </Layout>
   );

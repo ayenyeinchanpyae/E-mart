@@ -1,4 +1,4 @@
-import { addDoc, doc, setDoc } from "firebase/firestore";
+import { doc, setDoc } from "firebase/firestore";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { useState } from "react";
 import { toast } from "react-toastify";
@@ -6,15 +6,18 @@ import Loader from "../components/Loader";
 import "../stylesheets/authentication.css";
 import fireDB from "../fireConfig";
 import Cookies from "js-cookie";
+import { Link, useNavigate } from "react-router-dom";
 
 function RegisterPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [cpassword, setCpassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
   const auth = getAuth();
 
-  const register = async () => {
+  const register = async (e) => {
+    e.preventDefault();
     try {
       setLoading(true);
       const result = await createUserWithEmailAndPassword(
@@ -29,11 +32,14 @@ function RegisterPage() {
       await setDoc(messageRef, {
         cartItems: [],
       });
+      const userRef = doc(fireDB, "users", result.user.uid);
+      await setDoc(userRef, {
+        email: result.user.email,
+      });
       console.log("cart", messageRef);
       setLoading(false);
       toast.success("Registration successful");
-      //redirect to home page
-      window.location.href = "/";
+      navigate("/");
     } catch (error) {
       setLoading(false);
       console.log(error);
@@ -44,7 +50,7 @@ function RegisterPage() {
     <div className="container">
       {loading && <Loader />}
       <div className="d-flex align-items-center justify-content-center mt-5">
-        <div className="col-lg-3 col-md-5 mt-5">
+        <div className="col-lg-3 col-xl-3 col-md-6 col-sm-3 mt-5">
           <div className="m-5 text-center">
             <h2 className="text-center mb-3">Register</h2>
           </div>
@@ -78,12 +84,16 @@ function RegisterPage() {
             />
             <button
               type="button"
-              class="btn btn-primary w-100 my-3"
+              class="btn place-order-btn w-100 my-3"
               onClick={register}
             >
               Register
             </button>
           </form>
+
+          <hr />
+          <span>Have an account?</span>
+          <Link to="/login">Click here to login</Link>
         </div>
       </div>
     </div>

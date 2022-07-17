@@ -3,20 +3,15 @@ import {
   doc,
   updateDoc,
   setDoc,
-  addDoc,
   getDocs,
-  getDoc,
-  onSnapshot,
-  query,
 } from "firebase/firestore";
-import { v4 as uuidv4 } from "uuid";
+import { toast } from "react-toastify";
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import Layout from "../components/Layout";
 import fireDB from "../fireConfig";
 import Cookies from "js-cookie";
-import { FaCaretSquareDown, FaCartPlus, FaEye } from "react-icons/fa";
+import { FaCartPlus, FaEye } from "react-icons/fa";
 
 function Product() {
   const [products, setProducts] = useState([]);
@@ -24,7 +19,6 @@ function Product() {
   const [searchKey, setSearchKey] = useState("");
   const [filter, setFiler] = useState("");
   const navigate = useNavigate();
-  const dispatch = useDispatch();
   const uid = Cookies.get("id");
 
   useEffect(() => {
@@ -66,23 +60,36 @@ function Product() {
       if (productExist) {
         const itemRef = doc(fireDB, "cart", uid, "items", product.id);
 
-        await updateDoc(itemRef, {
-          quantity: productExist.quantity + 1,
-          price: productExist.price,
-        });
+        try {
+          await updateDoc(itemRef, {
+            quantity: productExist.quantity + 1,
+            price: productExist.price,
+          });
+          toast.success("Successfully added to cart");
+        } catch (error) {
+          console.log(error);
+          toast.error("Error occurred.Please try again");
+        }
       } else {
         const messageRef = doc(fireDB, "cart", uid, "items", product.id);
-        await setDoc(messageRef, {
-          id: product.id,
-          name: product.name,
-          price: product.price,
-          imageURL: product.imageURL,
-          description: product.description,
-          category: product.category,
-          quantity: product.quantity,
-        });
+        try {
+          await setDoc(messageRef, {
+            id: product.id,
+            name: product.name,
+            price: product.price,
+            imageURL: product.imageURL,
+            description: product.description,
+            category: product.category,
+            quantity: product.quantity,
+          });
+          toast.success("Successfully added to cart");
+        } catch (error) {
+          console.log(error);
+          toast.error("Error occurred.Please try again");
+        }
       }
     } else {
+      toast.error("Please login first to buy");
       navigate("/login");
     }
   };

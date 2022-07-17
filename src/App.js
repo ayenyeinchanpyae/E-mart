@@ -21,36 +21,16 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AdminPage from "./pages/AdminPage";
 import OrdersPage from "./pages/OrdersPage";
+import Footer from "./components/Footer";
 function App() {
   return (
     <>
       <ToastContainer />
       <Router>
         <Routes>
-          <Route
-            path="/productinfo/:productid"
-            element={
-              <ProtectedRoutes>
-                <ProductInfo />
-              </ProtectedRoutes>
-            }
-          />
-          <Route
-            path="/cart"
-            element={
-              <ProtectedRoutes>
-                <CartPage />
-              </ProtectedRoutes>
-            }
-          />
-          <Route
-            path="/orders"
-            element={
-              <ProtectedRoutes>
-                <OrdersPage />
-              </ProtectedRoutes>
-            }
-          />
+          <Route path="/productinfo/:productid" element={<ProductInfo />} />
+          <Route path="/cart" element={<CartPage />} />
+          <Route path="/orders" element={<OrdersPage />} />
           <Route
             path="/admin"
             element={

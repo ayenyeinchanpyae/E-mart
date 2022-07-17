@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { toast } from "react-toastify";
 import "../stylesheets/authentication.css";
@@ -11,32 +11,33 @@ function LoginPage() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const auth = getAuth();
-
-  const login = async () => {
+  const navigate = useNavigate();
+  const login = async (e) => {
+    e.preventDefault();
     try {
-      setLoading(true);
-      const result = await signInWithEmailAndPassword(auth, email, password);
-      console.log("result", result);
-      Cookies.set("Token", result.user.accessToken);
-      Cookies.set("id", result.user.uid);
-      window.location.href = "/";
-      setLoading(false);
-      toast.success("Login successful");
+      const auth = getAuth();
+
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      Cookies.set("Token", userCredential.user.accessToken);
+      Cookies.set("id", userCredential.user.uid);
+      navigate("/");
     } catch (error) {
-      setLoading(false);
-      console.log(error);
-      toast.error("Login fail");
+      toast.error("Wrong User Credential");
     }
   };
 
   return (
-    <div className="container">
+    <div className="container w-100 h-auto">
       {loading && <Loader />}
 
       <div className="d-flex align-items-center justify-content-center m-5">
-        <div className="col-lg-3 col-md-3 mt-5">
+        <div className="col-lg-4 col-xl-4 col-md-6 col-sm-3 mt-5">
           <div className="m-5 text-center">
-            <h2 className="text-center mb-3">Login</h2>
+            <h2 className="text-center mb-3">Welcome back!</h2>
           </div>
           <form action="">
             <input
@@ -60,7 +61,7 @@ function LoginPage() {
             {/* <button className="auth-btns m-3 w-75">LOGIN</button> */}
             <button
               type="button"
-              class="btn btn-primary w-100 my-3"
+              class="btn place-order-btn w-100 my-3"
               onClick={login}
             >
               Login

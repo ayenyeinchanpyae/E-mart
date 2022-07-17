@@ -2,15 +2,30 @@ import { Link } from "react-router-dom";
 import { FaBars, FaCartPlus } from "react-icons/fa";
 import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
-import { collection, getDocs } from "firebase/firestore";
+import { doc, collection, getDocs, getDoc } from "firebase/firestore";
 import fireDB from "../fireConfig";
+
 function Header() {
   const token = Cookies.get("Token");
   const uid = Cookies.get("id");
   const [cartItems, setCartItems] = useState([]);
+  const [email, setEmail] = useState("");
+  const [cartNumber, setCartNumber] = useState();
+
+  const getEmail = async () => {
+    const userRef = doc(fireDB, "users", uid);
+    const docSnap = await getDoc(userRef);
+    const email = docSnap.data().email;
+    setEmail(email);
+  };
+
   useEffect(() => {
     getCartItems();
-  });
+  }, []);
+
+  useEffect(() => {
+    getEmail();
+  }, []);
 
   const logout = () => {
     Cookies.remove("Token");
@@ -27,9 +42,27 @@ function Header() {
       querySnapshot.forEach((doc) => {
         itemArray.push(doc.data());
       });
+      const length = itemArray.length;
       setCartItems(itemArray);
-    } catch (error) {}
-    //setCartItems[itemArray.length];
+      setCartNumber(length);
+    } catch (error) {
+      console.log(error);
+    }
+    // const userRef = doc(fireDB, "users", uid);
+    // const docSnap = getDoc(userRef);
+
+    // console.log("Document data:", userRef);
+    // try {
+    //   const itemArray  = [];
+    //   const querySnapshot = await getDocs(
+    //     collection(fireDB, "cart", uid, "items")
+    //   );
+    //   querySnapshot.forEach((doc) => {
+    //     itemArray.push(doc.data());
+    //   });
+    //   setCartItems(itemArray);
+    // } catch (error) {}
+    // //setCartItems[itemArray.length];
   };
 
   return (
@@ -65,8 +98,12 @@ function Header() {
               </li>
               <li className="nav-item">
                 {token ? (
-                  <Link className="nav-link active" aria-current="page" to="">
-                    User Name
+                  <Link
+                    className="nav-link active"
+                    aria-current="page"
+                    to="/orders"
+                  >
+                    {email.substring(0, email.length - 10)}
                   </Link>
                 ) : (
                   <Link
@@ -77,13 +114,8 @@ function Header() {
                     Login
                   </Link>
                 )}
-                {/* {user.email.substring(0, user.email.length - 10)} */}
               </li>
-              {/* <li className="nav-item">
-                <Link className="nav-link" to="/">
-                  Orders
-                </Link>
-              </li> */}
+
               <li className="nav-item">
                 {token ? (
                   <Link className="nav-link" to="/" onClick={logout}>
