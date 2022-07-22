@@ -35,7 +35,7 @@ function LoginPage() {
       {loading && <Loader />}
 
       <div className="d-flex align-items-center justify-content-center m-5">
-        <div className="col-lg-4 col-xl-4 col-md-6 col-sm-3 mt-5">
+        <div className="col-lg-3 col-xl-3 col-md-6 col-sm-3 mt-5">
           <div className="m-5 text-center">
             <h2 className="text-center mb-3">Welcome back!</h2>
           </div>
