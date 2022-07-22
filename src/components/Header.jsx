@@ -53,9 +53,9 @@ function Header() {
   return (
     <div className="header">
       <nav className="navbar navbar-expand-lg navbar-light bg-light">
-        <div className="container-fluid">
+        <div className="container-fluid ms-3 ">
           <Link className="navbar-brand ms-5" to="/">
-            Ecommerce
+            E-mart
           </Link>
           <button
             className="navbar-toggler"

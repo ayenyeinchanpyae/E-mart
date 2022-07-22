@@ -35,10 +35,11 @@ function CartPage() {
 
   useEffect(() => {
     getCartItems();
+    totalPrice();
   }, []);
   useEffect(() => {
     totalPrice();
-  }, []);
+  }, [totalAmount]);
 
   const deleteFromCart = (product) => {
     const docRef = doc(fireDB, "cart", uid, "items", product.id);

@@ -124,8 +124,8 @@ function Product() {
         </div> */}
         <div className="row">
           {products
-            .filter((obj) => obj.name.toLowerCase().includes(searchKey))
-            .filter((obj) => obj.category.toLowerCase().includes(filter))
+            // .filter((obj) => obj.name.toLowerCase().includes(searchKey))
+            // .filter((obj) => obj.category.toLowerCase().includes(filter))
             .map((product) => {
               return (
                 <div className="col-md-6 col-lg-3" key={product.id}>
