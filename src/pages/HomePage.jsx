@@ -38,7 +38,6 @@ function HomePage() {
         productsArray.push(obj);
         setLoading(false);
       });
-      console.log("product array", productsArray.slice(-4));
       const array = productsArray.slice(-4);
       setProducts(array);
       console.log(products);
@@ -49,7 +48,6 @@ function HomePage() {
   }
   const addToCart = async (product) => {
     if (uid) {
-      console.log("has uid");
       const itemArray = [];
       const querySnapshot = await getDocs(
         collection(fireDB, "cart", uid, "items")
@@ -130,9 +128,9 @@ function HomePage() {
             <div className="row">
               {products.map((product) => {
                 return (
-                  <div className="col-md-6 col-lg-3">
+                  <div className="col-md-6 col-lg-3" key={product.id}>
                     <div className="m-2 p-1 product position-relative">
-                      <div className="product-content">
+                      <div className="product-content ">
                         <div className="text-center">
                           <img
                             src={product.imageURL}

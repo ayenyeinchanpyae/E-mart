@@ -40,6 +40,7 @@ function ProductInfo() {
 
   const addToCart = async (product) => {
     if (uid) {
+      console.log(uid);
       const itemArray = [];
       const querySnapshot = await getDocs(
         collection(fireDB, "cart", uid, "items")
@@ -51,26 +52,41 @@ function ProductInfo() {
       const productExist = itemArray.find((item) => item.id === product.id);
 
       if (productExist) {
+        console.log("product exist");
         const itemRef = doc(fireDB, "cart", uid, "items", product.id);
 
-        await updateDoc(itemRef, {
-          quantity: productExist.quantity + 1,
-          price: productExist.price,
-        });
+        try {
+          await updateDoc(itemRef, {
+            quantity: productExist.quantity + 1,
+            price: productExist.price,
+          });
+          toast.success("Successfully added to cart");
+          getData();
+        } catch (error) {
+          console.log(error);
+          toast.error("Error occurred.Please try again");
+        }
       } else {
         const messageRef = doc(fireDB, "cart", uid, "items", product.id);
-        await setDoc(messageRef, {
-          id: product.id,
-          name: product.name,
-          price: product.price,
-          imageURL: product.imageURL,
-          description: product.description,
-          category: product.category,
-          quantity: product.quantity,
-        });
+        try {
+          await setDoc(messageRef, {
+            id: product.id,
+            name: product.name,
+            price: product.price,
+            imageURL: product.imageURL,
+            description: product.description,
+            category: product.category,
+            quantity: product.quantity,
+          });
+          toast.success("Successfully added to cart");
+          getData();
+        } catch (error) {
+          console.log(error);
+          toast.error("Error occurred.Please try again");
+        }
       }
-      toast.success("Successfully added to cart");
     } else {
+      toast.error("Please login first to buy");
       navigate("/login");
     }
   };

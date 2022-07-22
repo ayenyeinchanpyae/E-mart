@@ -66,6 +66,7 @@ function Product() {
             price: productExist.price,
           });
           toast.success("Successfully added to cart");
+          getData();
         } catch (error) {
           console.log(error);
           toast.error("Error occurred.Please try again");
@@ -83,6 +84,7 @@ function Product() {
             quantity: product.quantity,
           });
           toast.success("Successfully added to cart");
+          getData();
         } catch (error) {
           console.log(error);
           toast.error("Error occurred.Please try again");
@@ -126,7 +128,7 @@ function Product() {
             .filter((obj) => obj.category.toLowerCase().includes(filter))
             .map((product) => {
               return (
-                <div className="col-md-6 col-lg-3">
+                <div className="col-md-6 col-lg-3" key={product.id}>
                   <div className="m-2 p-1 product position-relative">
                     <div className="product-content">
                       <div className="text-center">

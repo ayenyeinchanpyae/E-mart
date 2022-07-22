@@ -15,17 +15,17 @@ function Header() {
   const getEmail = async () => {
     const userRef = doc(fireDB, "users", uid);
     const docSnap = await getDoc(userRef);
-    const email = docSnap.data().email;
-    setEmail(email);
+    const data = docSnap.data().email;
+    setEmail(data);
   };
 
   useEffect(() => {
     getCartItems();
-  }, []);
+  }, [cartNumber]);
 
   useEffect(() => {
     getEmail();
-  }, []);
+  }, [email]);
 
   const logout = () => {
     Cookies.remove("Token");
@@ -43,26 +43,11 @@ function Header() {
         itemArray.push(doc.data());
       });
       const length = itemArray.length;
-      setCartItems(itemArray);
+      console.log(length);
       setCartNumber(length);
     } catch (error) {
       console.log(error);
     }
-    // const userRef = doc(fireDB, "users", uid);
-    // const docSnap = getDoc(userRef);
-
-    // console.log("Document data:", userRef);
-    // try {
-    //   const itemArray  = [];
-    //   const querySnapshot = await getDocs(
-    //     collection(fireDB, "cart", uid, "items")
-    //   );
-    //   querySnapshot.forEach((doc) => {
-    //     itemArray.push(doc.data());
-    //   });
-    //   setCartItems(itemArray);
-    // } catch (error) {}
-    // //setCartItems[itemArray.length];
   };
 
   return (
@@ -127,7 +112,7 @@ function Header() {
               </li>
               <li className="nav-item">
                 <Link className="nav-link" to="/cart">
-                  <FaCartPlus /> {cartItems.length}
+                  <FaCartPlus /> {cartNumber}
                 </Link>
               </li>
             </ul>

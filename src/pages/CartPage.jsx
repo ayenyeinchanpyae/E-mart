@@ -47,11 +47,13 @@ function CartPage() {
       setLoading(true);
       deleteDoc(docRef)
         .then(() => {
-          console.log("Entire Document has been deleted successfully.");
           setLoading(false);
+          toast.success("deleted successfly from cart");
           getCartItems();
+          totalPrice();
         })
         .catch((error) => {
+          toast.error("something went wrong,please try again");
           console.log(error);
         });
     } catch (error) {}
@@ -125,96 +127,93 @@ function CartPage() {
           });
       } catch (error) {}
     }
-
-    // try {
-    //   setLoading(true);
-    //   deleteDoc(docRef)
-    //     .then(() => {
-    //       console.log("Entire Document has been deleted successfully.");
-    //       setLoading(false);
-    //     })
-    //     .catch((error) => {
-    //       console.log(error);
-    //     });
-    // } catch (error) {}
   };
   return (
     <Layout loading={loading}>
       <div className="container">
-        <div className="row">
-          <div className="col-lg-6">
-            <div className="table-responsive">
-              <table className="table">
-                <thead>
-                  <tr>
-                    <th scope="col">Image</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Category</th>
-                    <th scope="col">Quantity</th>
-                    <th scope="col">Price</th>
-                    <th scope="col">Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {cartItems.map((item) => {
-                    return (
-                      <tr>
-                        <td>
-                          <img
-                            src={item.imageURL}
-                            alt=""
-                            height="80"
-                            width="80"
-                          />
-                        </td>
-                        <td>{item.name}</td>
-                        <td>{item.category}</td>
-                        <td>{item.quantity}</td>
-                        <td>${item.price * item.quantity}</td>
-                        <td>
-                          <div className="action-btn">
-                            <FaTrash onClick={() => deleteFromCart(item)} />
-                          </div>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
-          </div>
-          <div className="d-flex  align-items-center justify-content-center col-sm-12 col-xs-12 col-md-12 col-lg-6 ">
-            <div className="d-flex flex-column w-50">
-              <h4 className="text-center">Order Summary</h4>
-              <div className="d-flex justify-content-between mb-2">
-                <span>Items Price</span>
-                <span>{totalAmount}</span>
-              </div>
-              <div className="d-flex justify-content-between mb-2">
-                <span>Discount</span>
-                <span>{discount}</span>
-              </div>
-              <div className="d-flex justify-content-between mb-2">
-                <span>Tax</span>
-                <span>{tax}</span>
-              </div>
-              <div className="d-flex justify-content-between mb-2">
-                <span>Delivery Fee</span>
-                <span>{deliveryFee}</span>
-              </div>
-              <hr />
-              <div className="d-flex justify-content-between">
-                <span>Total</span>
-                <span>$ - {discount + totalAmount + tax + deliveryFee}</span>
-              </div>
-              <div className="d-flex justify-content-end mt-3">
-                <button className="place-order-btn w-100" onClick={handleShow}>
-                  CheckOut
-                </button>
+        {cartItems.length > 0 ? (
+          <div className="row">
+            <div className="col-lg-6">
+              <div className="table-responsive">
+                <table className="table">
+                  <thead>
+                    <tr>
+                      <th scope="col">Image</th>
+                      <th scope="col">Name</th>
+
+                      <th scope="col">Quantity</th>
+                      <th scope="col">Price</th>
+                      <th scope="col">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {cartItems.map((item) => {
+                      return (
+                        <tr>
+                          <td>
+                            <img
+                              src={item.imageURL}
+                              alt=""
+                              height="80"
+                              width="80"
+                            />
+                          </td>
+                          <td>{item.name}</td>
+
+                          <td>{item.quantity}</td>
+                          <td>${item.price * item.quantity}</td>
+                          <td>
+                            <div className="action-btn">
+                              <FaTrash onClick={() => deleteFromCart(item)} />
+                            </div>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
               </div>
             </div>
+            <div className="d-flex  align-items-center justify-content-center col-sm-12 col-xs-12 col-md-12 col-lg-6 ">
+              <div className="d-flex flex-column w-50">
+                <h4 className="text-center">Order Summary</h4>
+                <div className="d-flex justify-content-between mb-2">
+                  <span>Items Price</span>
+                  <span>{totalAmount}</span>
+                </div>
+                <div className="d-flex justify-content-between mb-2">
+                  <span>Discount</span>
+                  <span>{discount}</span>
+                </div>
+                <div className="d-flex justify-content-between mb-2">
+                  <span>Tax</span>
+                  <span>{tax}</span>
+                </div>
+                <div className="d-flex justify-content-between mb-2">
+                  <span>Delivery Fee</span>
+                  <span>{deliveryFee}</span>
+                </div>
+                <hr />
+                <div className="d-flex justify-content-between">
+                  <span>Total</span>
+                  <span>$ - {discount + totalAmount + tax + deliveryFee}</span>
+                </div>
+                <div className="d-flex justify-content-end mt-3">
+                  <button
+                    className="place-order-btn w-100"
+                    onClick={handleShow}
+                  >
+                    CheckOut
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
+        ) : (
+          <h3 className="row align-items-center justify-content-center">
+            You don't have any item in your cart
+          </h3>
+        )}
       </div>
 
       <Modal show={show} onHide={handleClose}>
