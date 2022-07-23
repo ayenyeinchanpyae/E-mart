@@ -25,7 +25,7 @@ function Header() {
 
   useEffect(() => {
     getEmail();
-  }, [email]);
+  }, []);
 
   const logout = () => {
     Cookies.remove("Token");

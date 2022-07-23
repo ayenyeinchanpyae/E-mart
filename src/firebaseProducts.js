@@ -153,4 +153,35 @@ Button closure
     imageURL:
       "https://m.media-amazon.com/images/I/61F63R6DQ8L._AC_UL640_QL65_.jpg",
   },
+  {
+    price: 319,
+    description: `Canvas,Leather Imported Fabric: Canvas Leather trim, Monogram patch at side Length: 17.25in / 44cm Height: 13.5in / 34cm Magnetic closure`,
+    name: "Tory Burch Women's Ella Canvas Tote",
+    category: "bag",
+    imageURL: "https://m.media-amazon.com/images/I/81kEu3bLsdL._AC_UY695_.jpg",
+  },
+  {
+    price: 390,
+    description: `Imported Fabric: Woven raffia Stripe pattern with scallop edges Length: 11.75in / 30cm Height: 9.75in / 25cm Open top`,
+    category: "bag",
+    name: "Vanessa Bruno Women's Panier Tote",
+    imageURL:
+      "https://m.media-amazon.com/images/I/71KByADmoWL._AC_SX421_SY746_.jpg",
+  },
+  {
+    price: 390,
+    description: `Imported Fabric: Woven raffia Stripe pattern with scallop edges Length: 11.75in / 30cm Height: 9.75in / 25cm Open top`,
+    category: "bag",
+    name: "Cinema Secrets Ultimate Foundation",
+    imageURL:
+      "https://m.media-amazon.com/images/I/71KByADmoWL._AC_SX421_SY746_.jpg",
+  },
+  {
+    price: 390,
+    description: `Imported Fabric: Woven raffia Stripe pattern with scallop edges Length: 11.75in / 30cm Height: 9.75in / 25cm Open top`,
+    category: "bag",
+    name: "Cinema Secrets Ultimate Foundation",
+    imageURL:
+      "https://m.media-amazon.com/images/I/71KByADmoWL._AC_SX421_SY746_.jpg",
+  },
 ];

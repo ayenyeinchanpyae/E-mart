@@ -155,9 +155,9 @@ function HomePage() {
                               </div>
                               <div>
                                 <FaEye
-                                  onClick={() => {
-                                    navigate(`/productinfo/${product.id}`);
-                                  }}
+                                // onClick={() => {
+                                //   navigate(`/productinfo/${product.id}`);
+                                // }}
                                 />
                               </div>
                             </div>

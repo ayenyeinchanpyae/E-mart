@@ -14,6 +14,7 @@ import "../stylesheets/cart.css";
 import { Modal, Button } from "react-bootstrap";
 import { toast } from "react-toastify";
 import Cookies from "js-cookie";
+import Loader from "../components/Loader";
 
 function CartPage() {
   const [cartItems, setCartItems] = useState([]);
@@ -131,7 +132,7 @@ function CartPage() {
   };
   return (
     <Layout loading={loading}>
-      <div className="container">
+      <div className="container" style={{ height: "80vh" }}>
         {cartItems.length > 0 ? (
           <div className="row">
             <div className="col-lg-6">

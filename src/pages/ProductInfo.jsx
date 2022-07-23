@@ -24,13 +24,19 @@ function ProductInfo() {
   }, []);
 
   async function getData() {
+    const productID = params.productid;
+    console.log(productID);
     try {
       setLoading(true);
-      const productTemp = await getDoc(
-        doc(fireDB, "products", params.productid)
-      );
+      const docRef = doc(fireDB, "products", productID);
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        setProduct(docSnap.data());
+      } else {
+        // doc.data() will be undefined in this case
+        console.log("No such document!");
+      }
 
-      setProduct(productTemp.data());
       setLoading(false);
     } catch (error) {
       console.log(error);
@@ -40,7 +46,6 @@ function ProductInfo() {
 
   const addToCart = async (product) => {
     if (uid) {
-      console.log(uid);
       const itemArray = [];
       const querySnapshot = await getDocs(
         collection(fireDB, "cart", uid, "items")
@@ -52,7 +57,6 @@ function ProductInfo() {
       const productExist = itemArray.find((item) => item.id === product.id);
 
       if (productExist) {
-        console.log("product exist");
         const itemRef = doc(fireDB, "cart", uid, "items", product.id);
 
         try {
