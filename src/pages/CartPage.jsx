@@ -129,7 +129,7 @@ function CartPage() {
   };
   return (
     <Layout loading={loading}>
-      <div className="container" style={{ height: "80vh" }}>
+      <div className="container cart-container">
         {cartItems.length > 0 ? (
           <div className="row">
             <div className="col-lg-6">

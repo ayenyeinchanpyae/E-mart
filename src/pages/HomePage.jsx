@@ -67,6 +67,7 @@ function HomePage() {
             price: productExist.price,
           });
           toast.success("Successfully added to cart");
+          getData();
         } catch (error) {
           console.log(error);
           toast.error("Error occurred.Please try again");
@@ -84,6 +85,7 @@ function HomePage() {
             quantity: product.quantity,
           });
           toast.success("Successfully added to cart");
+          getData();
         } catch (error) {
           console.log(error);
           toast.error("Error occurred.Please try again");

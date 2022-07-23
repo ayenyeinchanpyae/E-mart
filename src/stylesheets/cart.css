@@ -11,3 +11,7 @@
   color: white;
   height: 2.5rem;
 }
+
+.cart-container {
+  height: 100vh;
+}
