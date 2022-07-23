@@ -1,6 +1,6 @@
 import { FaTrash } from "react-icons/fa";
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+
 import {
   collection,
   addDoc,
@@ -14,7 +14,6 @@ import "../stylesheets/cart.css";
 import { Modal, Button } from "react-bootstrap";
 import { toast } from "react-toastify";
 import Cookies from "js-cookie";
-import Loader from "../components/Loader";
 
 function CartPage() {
   const [cartItems, setCartItems] = useState([]);
@@ -25,7 +24,6 @@ function CartPage() {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [pinCode, setPinCode] = useState("");
 
-  const dispatch = useDispatch();
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -36,11 +34,10 @@ function CartPage() {
 
   useEffect(() => {
     getCartItems();
-    totalPrice();
-  }, []);
+  });
   useEffect(() => {
     totalPrice();
-  }, [totalAmount]);
+  });
 
   const deleteFromCart = (product) => {
     const docRef = doc(fireDB, "cart", uid, "items", product.id);
@@ -65,7 +62,7 @@ function CartPage() {
     let total = 0;
     cartItems.forEach((item) => {
       total = total + item.price;
-      console.log(total);
+      console.log("total", total);
     });
     setTotalAmount(total);
   };
@@ -102,7 +99,7 @@ function CartPage() {
 
     try {
       setLoading(true);
-      const result = await addDoc(collection(fireDB, "orders"), orderInfo);
+      await addDoc(collection(fireDB, "orders"), orderInfo);
       clearCart();
       setLoading(false);
       toast.success("Order Placed successfully");

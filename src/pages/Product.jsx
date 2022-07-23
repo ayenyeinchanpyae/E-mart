@@ -11,7 +11,7 @@ import { useNavigate } from "react-router-dom";
 import Layout from "../components/Layout";
 import fireDB from "../fireConfig";
 import Cookies from "js-cookie";
-import { FaCartPlus, FaEye } from "react-icons/fa";
+import { FaCartPlus } from "react-icons/fa";
 
 function Product() {
   const [products, setProducts] = useState([]);
@@ -146,20 +146,20 @@ function Product() {
                       <div className="product-actions">
                         <div className="d-flex flex-column">
                           <h3>$ - {product.price}</h3>
-                          <div className="d-flex justify-content-between mt-3">
+                          <div className="d-flex align-items-center justify-content-center">
                             <div>
                               <FaCartPlus
                                 className="cart-btn fs-5"
                                 onClick={() => addToCart(product)}
                               />
                             </div>
-                            <div>
+                            {/* <div>
                               <FaEye
-                              // onClick={() => {
-                              //   navigate(`/productinfo/${product.id}`);
-                              // }}
+                              onClick={() => {
+                                navigate(`/productinfo/${product.id}`);
+                              }}
                               />
-                            </div>
+                            </div> */}
                           </div>
                         </div>
                       </div>

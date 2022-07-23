@@ -13,7 +13,7 @@ import Cookies from "js-cookie";
 
 import fireDB from "../fireConfig";
 import Layout from "../components/Layout";
-import { FaCartPlus, FaEye } from "react-icons/fa";
+import { FaCartPlus } from "react-icons/fa";
 
 import hero from "../images/hero.png";
 function HomePage() {
@@ -146,7 +146,7 @@ function HomePage() {
                         <div className="product-actions">
                           <div className="d-flex flex-column">
                             <h3>$ - {product.price}</h3>
-                            <div className="d-flex justify-content-between mt-3">
+                            <div className="d-flex align-items-center justify-content-center mt-3">
                               <div>
                                 <FaCartPlus
                                   className="cart-btn fs-5"
@@ -154,11 +154,11 @@ function HomePage() {
                                 />
                               </div>
                               <div>
-                                <FaEye
-                                // onClick={() => {
-                                //   navigate(`/productinfo/${product.id}`);
-                                // }}
-                                />
+                                {/* <FaEye
+                                onClick={() => {
+                                  navigate(`/productinfo/${product.id}`);
+                                }}
+                                /> */}
                               </div>
                             </div>
                           </div>
