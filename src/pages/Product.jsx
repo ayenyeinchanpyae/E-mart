@@ -12,6 +12,7 @@ import Layout from "../components/Layout";
 import fireDB from "../fireConfig";
 import Cookies from "js-cookie";
 import { FaCartPlus, FaEye } from "react-icons/fa";
+import { useDispatch } from "react-redux";
 
 function Product() {
   const [products, setProducts] = useState([]);
@@ -19,6 +20,7 @@ function Product() {
   const [searchKey, setSearchKey] = useState("");
   const [filter, setFiler] = useState("");
   const navigate = useNavigate();
+
   const uid = Cookies.get("id");
 
   useEffect(() => {

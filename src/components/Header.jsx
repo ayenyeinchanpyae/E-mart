@@ -21,7 +21,7 @@ function Header() {
 
   useEffect(() => {
     getCartItems();
-  }, [cartNumber]);
+  });
 
   useEffect(() => {
     getEmail();

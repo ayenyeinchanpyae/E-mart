@@ -120,53 +120,57 @@ function HomePage() {
           </div>
         </div>
         {/* popular items */}
-        <div className="row m-1 mt-5">
-          <div className="col-lg-12">
-            <h3>Popular Items</h3>
-          </div>
-          <div className="container">
-            <div className="row">
-              {products.map((product) => {
-                return (
-                  <div className="col-md-6 col-lg-3" key={product.id}>
-                    <div className="m-2 p-1 product position-relative">
-                      <div className="product-content ">
-                        <div className="text-center">
-                          <img
-                            src={product.imageURL}
-                            alt=""
-                            className="product-img m-2"
-                          />
+        <div className="col-lg-12 mt-5">
+          <h3>Popular Items</h3>
+        </div>
+        {loading ? (
+          <div style={{ height: "300px" }} />
+        ) : (
+          <div className="row m-1 mt-5">
+            <div className="container">
+              <div className="row">
+                {products.map((product) => {
+                  return (
+                    <div className="col-md-6 col-lg-3" key={product.id}>
+                      <div className="m-2 p-1 product position-relative">
+                        <div className="product-content ">
+                          <div className="text-center">
+                            <img
+                              src={product.imageURL}
+                              alt=""
+                              className="product-img m-2"
+                            />
+                          </div>
+                          <p className="m-2">{product.name}</p>
                         </div>
-                        <p className="m-2">{product.name}</p>
-                      </div>
-                      <div className="product-actions">
-                        <div className="d-flex flex-column">
-                          <h3>$ - {product.price}</h3>
-                          <div className="d-flex justify-content-between mt-3">
-                            <div>
-                              <FaCartPlus
-                                className="cart-btn fs-5"
-                                onClick={() => addToCart(product)}
-                              />
-                            </div>
-                            <div>
-                              <FaEye
-                                onClick={() => {
-                                  navigate(`/productinfo/${product.id}`);
-                                }}
-                              />
+                        <div className="product-actions">
+                          <div className="d-flex flex-column">
+                            <h3>$ - {product.price}</h3>
+                            <div className="d-flex justify-content-between mt-3">
+                              <div>
+                                <FaCartPlus
+                                  className="cart-btn fs-5"
+                                  onClick={() => addToCart(product)}
+                                />
+                              </div>
+                              <div>
+                                <FaEye
+                                  onClick={() => {
+                                    navigate(`/productinfo/${product.id}`);
+                                  }}
+                                />
+                              </div>
                             </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                );
-              })}
+                  );
+                })}
+              </div>
             </div>
           </div>
-        </div>
+        )}
       </div>
     </Layout>
   );
