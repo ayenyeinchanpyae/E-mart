@@ -114,8 +114,8 @@ function HomePage() {
             </Link>
           </div>
           <div className="d-flex align-items-center justify-content-center col-lg-6 col-md-12 col-sm-12 col-xs-12">
-            <div>
-              <img className="" src={hero} alt="" width="500px" height="auto" />
+            <div style={{ width: "500px" }}>
+              <img className="" src={hero} alt="" width="100%" height="auto" />
             </div>
           </div>
         </div>
