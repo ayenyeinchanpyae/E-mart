@@ -173,7 +173,7 @@ function CartPage() {
                 </table>
               </div>
             </div>
-            <div className="d-flex  align-items-center justify-content-center col-sm-12 col-xs-12 col-md-12 col-lg-6 ">
+            <div className="d-flex  align-items-center justify-content-center col-sm-12 col-xs-12 col-md-12 col-lg-6 order-summary ">
               <div className="d-flex flex-column w-50">
                 <h4 className="text-center">Order Summary</h4>
                 <div className="d-flex justify-content-between mb-2">
