@@ -1,10 +1,10 @@
-E-mart (E-commerce website)
+**E-mart (E-commerce website)**
 
 This poject was created with React, Bootstrap and Firebase.
 
-Live Link: 
+Live Link: https://e-mart-eight.vercel.app/
 
-Features
+**Features**
 This project includes:
 
 1. Home Page
