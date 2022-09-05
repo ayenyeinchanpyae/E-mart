@@ -3,7 +3,7 @@ import Layout from "../components/Layout";
 import { collection, addDoc, getDocs, doc, getDoc } from "firebase/firestore";
 import fireDB from "../fireConfig";
 import Cookies from "js-cookie";
-
+import "../stylesheets/order.css";
 function OrdersPage() {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -28,14 +28,14 @@ function OrdersPage() {
 
   async function getData() {
     try {
-      //setLoading(true);
+      setLoading(true);
       const result = await getDocs(collection(fireDB, "orders"));
       console.log(result);
       const resultArray = [];
       const ordersArray = [];
       result.forEach((doc) => {
         resultArray.push(doc.data());
-        // setLoading(false);
+        setLoading(false);
       });
       console.log("resultArray", resultArray);
       for (var i = 0; i < resultArray.length; i++) {
@@ -57,50 +57,55 @@ function OrdersPage() {
   }
   return (
     <Layout loading={loading}>
-      <div className="d-flex align-items-center justify-content-center">
-        <h3>{email.substring(0, email.length - 10)}'s order</h3>
+      <div className="d-flex align-items-center justify-content-center order-wrapper">
+        {orders.length > 0 ? (
+          <h3>{email.substring(0, email.length - 10)}'s order</h3>
+        ) : (
+          <h3>You don't have any order</h3>
+        )}
       </div>
-      {orders.map((order) => {
-        return (
-          <div className="container">
-            <div className="row align-items-center justify-content-center">
-              <div className="col-8">
-                <div className="table-responsive">
-                  <table className="table mt-5 order">
-                    <thead>
-                      <tr>
-                        <th>Image</th>
-                        <th>Name</th>
-                        <th>Quantity</th>
-                        <th>Price</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {order.cartItems.map((item) => {
-                        return (
-                          <tr>
-                            <td>
-                              <img
-                                src={item.imageURL}
-                                alt=""
-                                height="80"
-                                width="80"
-                              />
-                            </td>
-                            <td>{item.name}</td>
-                            <td>{item.quantity}</td>
-                            <td>{item.price}</td>
-                          </tr>
-                        );
-                      })}
-                    </tbody>
-                  </table>
+      {orders &&
+        orders.map((order) => {
+          return (
+            <div className="container">
+              <div className="row align-items-center justify-content-center">
+                <div className="col-8">
+                  <div className="table-responsive">
+                    <table className="table mt-5 order">
+                      <thead>
+                        <tr>
+                          <th>Image</th>
+                          <th>Name</th>
+                          <th>Quantity</th>
+                          <th>Price</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {order.cartItems.map((item) => {
+                          return (
+                            <tr>
+                              <td>
+                                <img
+                                  src={item.imageURL}
+                                  alt=""
+                                  height="80"
+                                  width="80"
+                                />
+                              </td>
+                              <td>{item.name}</td>
+                              <td>{item.quantity}</td>
+                              <td>{item.price}</td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        );
-      })}
+          );
+        })}
     </Layout>
   );
 }
